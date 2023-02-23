@@ -6,7 +6,7 @@
       <button class="btn btn-primary ml-2" @click.prevent="createWeather">Add city</button>
     </div>
 
-    <table class="table mt-3" v-if="weathers != 0">
+    <table class="table mt-3" v-if="weathers!=0">
       <thead>
         <tr>
           <th scope="col">City</th>
@@ -29,31 +29,40 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   data() {
     return {
       city: "",
-      day: "",
+      day:"",
       weathers: []
     }
   },
   methods: {
     createWeather() {
-      const temp_min = 1
-      const temp_max = 3
-      const weather = {
-        city: this.city,
-        temp_min,
-        temp_max
-      }
-      this.weathers.push(weather)
-      this.city = ''
-
+      axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=a1e741330530300f2cfaba4609cf3763`)
+        .then(response => {
+          this.weather = response.data;
+          console.log(response.data);
+          const temp_min = response.data.main.temp_min
+          const temp_max = response.data.main.temp_max
+          const weather = {
+            city: this.city,
+            temp_min,
+            temp_max
+          }
+          this.weathers.push(weather)
+          this.city = ''
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     deleteWeather(index) {
       this.weathers.splice(index, 1)
-    }
+    },
+
   },
 };
 </script>
