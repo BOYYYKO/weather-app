@@ -5,6 +5,7 @@
       <input v-model="city" id="city" type="text" class="form-control mr-2" placeholder="Add city" />
       <button class="btn btn-primary ml-2" @click.prevent="createWeather">Add city</button>
     </div>
+    <button type="button" v-if="weathers!=0" class="btn btn-primary mt-2 w-100" @click="sortWeather()">Sort</button>
 
     <table class="table mt-3" v-if="weathers!=0">
       <thead>
@@ -62,7 +63,17 @@ export default {
     deleteWeather(index) {
       this.weathers.splice(index, 1)
     },
-
+    sortWeather(){
+      this.weathers.sort(function (a, b) {
+        if (a.city > b.city) {
+          return 1;
+        }
+        if (a.city < b.city) {
+          return -1;
+        }
+        return 0;
+      });
+    }
   },
 };
 </script>
